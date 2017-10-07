@@ -7,8 +7,7 @@ cmake_minimum_required(VERSION 3.2.0)
 enable_testing()
 
 # add project cmake module path
-set(PRJ_CMAKE_MODULE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
-list(APPEND CMAKE_MODULE_PATH ${PRJ_CMAKE_MODULE_DIR})
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
 
 include(CMakePackageConfigHelpers)
 include(Util)
@@ -32,12 +31,22 @@ if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
   project(${PRJ_NAME} C CXX)
 
   set(PRJ_STANDALONE_BUILD TRUE)
-  set(PRJ_SKIP_TESTS OFF)
-  set(PRJ_DEBUG ON)
+  set(LLVMUTILS_SKIP_TESTS OFF)
+  set(LLVMUTILS_DEBUG ON)
+  set(LLVMUTILS_EXPORT ${PRJ_NAME})
 
   message(STATUS "configuring as standalone LLVM project")
 endif()
 
+if(NOT LLVMUTILS_EXPORT)
+  message(FATAL_ERROR 
+    "LLVMUTILS_EXPORT must be defined when built as dependent project")
+endif()
+
+file(RELATIVE_PATH PATH_PREFIX ${CMAKE_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR})
+if(NOT PATH_PREFIX)
+  set(PATH_PREFIX ".")
+endif()
 
 # CMP0056 is required for any libc++abi dependency of the try_compile() command
 # this bumps required version to 3.2
@@ -99,19 +108,17 @@ target_compile_definitions(${LIB_NAME} PUBLIC ${LLVM_DEFINITIONS})
 target_compile_definitions(${LIB_NAME} PRIVATE VERSION_STRING=${PRJ_VERSION})
 
 set(PRJ_DEBUG_VALUE 0)
-if(PRJ_DEBUG)
+if(LLVMUTILS_DEBUG)
   set(PRJ_DEBUG_VALUE 1)
 endif()
 
 target_include_directories(${LIB_NAME} PUBLIC ${LLVM_INCLUDE_DIRS})
 target_include_directories(${LIB_NAME} PUBLIC
-  $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>)
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>)
 target_include_directories(${LIB_NAME} PUBLIC
-  $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include>)
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>)
 target_include_directories(${LIB_NAME} PUBLIC
-  $<INSTALL_INTERFACE:${CMAKE_INSTALL_PREFIX}/include>)
-target_include_directories(${LIB_NAME} PUBLIC
-  $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>)
+  $<INSTALL_INTERFACE:$<INSTALL_PREFIX>/${PATH_PREFIX}/include>)
 
 #
 
@@ -137,22 +144,23 @@ add_subdirectory(tests)
 add_subdirectory(doc)
 
 
-attach_compilation_db(TARGET ${LIB_NAME})
+if(PRJ_STANDALONE_BUILD)
+  attach_compilation_db(TARGET ${LIB_NAME})
+endif()
 
 
 # installation
 
 set(CMAKE_INSTALL_MESSAGE "LAZY")
 
-set(PRJ_INSTALL_INCLUDE_DIR "include")
-set(PRJ_INSTALL_SHARE_DIR "share")
+set(PRJ_INSTALL_INCLUDE_DIR "${PATH_PREFIX}/include")
+set(PRJ_INSTALL_SHARE_DIR "${PATH_PREFIX}/share")
 set(PRJ_CONFIG_HEADER_FILE "Config.hpp")
 set(PRJ_CMAKE_CONFIG_FILE "config.cmake")
 set(PRJ_CMAKE_CONFIG_EXTRA_FILE "config-extra.cmake")
 
-if(PRJ_STANDALONE_BUILD)
-  install(TARGETS ${LIB_NAME} EXPORT ${PRJ_NAME} ARCHIVE DESTINATION "lib")
-endif()
+install(TARGETS ${LIB_NAME} EXPORT ${LLVMUTILS_EXPORT}
+  ARCHIVE DESTINATION "${PATH_PREFIX}/lib")
 
 file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/include")
 set_directory_properties(PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES
@@ -182,10 +190,13 @@ install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/include/"
   PATTERN "*.in" EXCLUDE)
 install(DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/include/" 
   DESTINATION ${PRJ_INSTALL_INCLUDE_DIR})
-install(DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/share/"
-  DESTINATION ${PRJ_INSTALL_SHARE_DIR})
 
 if(PRJ_STANDALONE_BUILD)
-  install(EXPORT ${PRJ_NAME} DESTINATION "${PRJ_INSTALL_SHARE_DIR}/cmake")
+  install(DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/share/"
+    DESTINATION ${PRJ_INSTALL_SHARE_DIR})
+endif()
+
+if(PRJ_STANDALONE_BUILD)
+  install(EXPORT ${LLVMUTILS_EXPORT} DESTINATION "${PRJ_INSTALL_SHARE_DIR}/cmake")
 endif()
 
