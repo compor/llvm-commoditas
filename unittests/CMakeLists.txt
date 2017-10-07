@@ -3,7 +3,7 @@
 # requirements
 
 if(LLVMUTILS_SKIP_TESTS)
-  message(WARNING "Testing is disabled; skipping unit tests")
+  message(STATUS "Testing is disabled; skipping unit tests")
 
   return()
 endif()
