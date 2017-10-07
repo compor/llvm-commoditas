@@ -18,7 +18,7 @@ function(get_version)
   endif()
 
   execute_process(COMMAND git describe --tags --always ${cmd_arg}
-    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
     OUTPUT_VARIABLE ver
     RESULT_VARIABLE result
     ERROR_QUIET
