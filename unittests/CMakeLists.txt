@@ -2,7 +2,7 @@
 
 # requirements
 
-if(PRJ_SKIP_TESTS)
+if(LLVMUTILS_SKIP_TESTS)
   message(WARNING "Testing is disabled; skipping unit tests")
 
   return()

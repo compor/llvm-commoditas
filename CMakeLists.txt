@@ -14,10 +14,10 @@ include(CMakePackageConfigHelpers)
 include(Util)
 include(HandleLLVMDependency)
 
-option(PRJ_SKIP_TESTS "Skip configuring the project tests" ON)
-option(PRJ_DEBUG "Enable project custom debug output facilities" OFF)
+option(LLVMUTILS_SKIP_TESTS "Skip configuring the project tests" ON)
+option(LLVMUTILS_DEBUG "Enable project custom debug output facilities" OFF)
 
-message(STATUS "project debug: ${PRJ_DEBUG}")
+message(STATUS "project debug: ${LLVMUTILS_DEBUG}")
 
 get_version(VERSION PRJ_VERSION)
 
