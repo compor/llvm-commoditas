@@ -18,7 +18,7 @@ option(LLVMUTILS_DEBUG "Enable project custom debug output facilities" OFF)
 
 message(STATUS "project debug: ${LLVMUTILS_DEBUG}")
 
-get_version(VERSION PRJ_VERSION)
+get_version(SHORT VERSION PRJ_VERSION)
 
 set(PRJ_NAME LLVMUtils)
 string(TOUPPER ${PRJ_NAME} PRJ_NAME_UPPER)
