@@ -35,9 +35,9 @@
 #include "gtest/gtest.h"
 // using testing::Test
 
-namespace icsa {
+namespace commoditas {
 
 TEST(LLVMUtils, DISABLE_Dummy) {
 }
 
-} // namespace icsa end
+} // namespace commoditas end

@@ -11,10 +11,10 @@ namespace llvm {
 class Function;
 } // namespace llvm end
 
-namespace icsa {
+namespace commoditas {
 
 void DemoteFunctionArgs(llvm::Function &F);
 
-} // namespace icsa end
+} // namespace commoditas end
 
 #endif // header

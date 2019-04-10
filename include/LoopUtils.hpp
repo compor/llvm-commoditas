@@ -17,7 +17,7 @@ class DominatorTree;
 class PostDominatorTree;
 } // namespace llvm
 
-namespace icsa {
+namespace commoditas {
 
 llvm::Loop *GetTopLevelLoopFor(const llvm::LoopInfo &LI,
                                const llvm::Instruction &I);
@@ -31,6 +31,6 @@ llvm::BasicBlock *GetPredecessorBlockFor(const llvm::Loop &CurLoop,
 llvm::BasicBlock *GetSuccessorBlockFor(const llvm::Loop &CurLoop,
                                        llvm::DominatorTree &DT);
 
-} // namespace icsa end
+} // namespace commoditas end
 
 #endif // header

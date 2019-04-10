@@ -21,7 +21,7 @@
 // using llvm::pred_begin
 // using llvm::pred_end
 
-namespace icsa {
+namespace commoditas {
 
 llvm::Loop *GetTopLevelLoopFor(const llvm::LoopInfo &LI,
                                const llvm::BasicBlock &BB) {
@@ -80,4 +80,4 @@ llvm::BasicBlock *GetSuccessorBlockFor(const llvm::Loop &CurLoop,
   return LoopSuccBlock;
 }
 
-} // namespace icsa end
+} // namespace commoditas end

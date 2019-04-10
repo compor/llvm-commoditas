@@ -29,7 +29,7 @@
 #include <type_traits>
 // using std::remove_reference_t
 
-namespace icsa {
+namespace commoditas {
 
 void GetIntermediateLoopBlocks(
     llvm::SmallVectorImpl<llvm::BasicBlock *> &IntermediateBlocks,
@@ -63,4 +63,4 @@ void GetIntermediateLoopBlocks(
   return;
 }
 
-} // namespace icsa end
+} // namespace commoditas end

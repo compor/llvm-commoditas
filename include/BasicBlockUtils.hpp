@@ -14,13 +14,13 @@ class PostDominatorTree;
 template <typename T> class SmallVectorImpl;
 } // namespace llvm end
 
-namespace icsa {
+namespace commoditas {
 
 void GetIntermediateLoopBlocks(
     llvm::SmallVectorImpl<llvm::BasicBlock *> &IntermediateBlocks,
     const llvm::BasicBlock &StartBB, const llvm::BasicBlock &EndBB,
     llvm::DominatorTree &DT, llvm::PostDominatorTree &PDT);
 
-} // namespace icsa end
+} // namespace commoditas end
 
 #endif // header

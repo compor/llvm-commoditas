@@ -15,7 +15,7 @@
 // using llvm::LoadInst
 // using llvm::StoreInst
 
-namespace icsa {
+namespace commoditas {
 
 void DemoteFunctionArgs(llvm::Function &F) {
   auto as = F.getParent()->getDataLayout().getAllocaAddrSpace();
@@ -40,4 +40,4 @@ void DemoteFunctionArgs(llvm::Function &F) {
   return;
 }
 
-} // namespace icsa
+} // namespace commoditas
